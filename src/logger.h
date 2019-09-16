@@ -1,8 +1,7 @@
 //
 //  logger.h
-//  Logger
 //
-//  Created by Albert Bode on 2/19/19.
+//  Created by Albert Bode on 9/12/19.
 //  Copyright © 2019 Albert Bode. All rights reserved.
 //
 
@@ -32,53 +31,55 @@ struct logger {
 		}
 	};
 private:
-	std::string logFilename;
+	std::string logLocation;
 	std::ofstream logfh;
 	std::queue<logMsg> msgBuffer;
-public:
 	int debugLevel;
 	
-	void setlogfile(std::string filename){this->logFilename = filename;};
-	void log_msg(int msg_type, const std::string& msg){this->msgBuffer.push(logMsg(msg_type,msg));};
+public:
+	void set_logfile(std::string filelocation){this->writeLog();this->logLocation = filelocation;};
+	void set_debug_level(int debugLevel){this->writeLog();this->debugLevel = debugLevel;};
+	void log_msg(int msg_type, const std::string& msg){this->msgBuffer.push(logMsg(msg_type,msg));if (msgBuffer.size() > 10){this->writeLog();}};
 	void writeLog(){
 		while(!this->msgBuffer.empty()){
 			logMsg curmsg = this->msgBuffer.front();
+			std::string linebuf;
 			if (curmsg.msg_type <= this->debugLevel){
 				std::time_t t = std::time(0);
 				char tstring[100];
 				std::strftime(tstring, sizeof(tstring), "[%H:%M:%S]", std::localtime(&t));
-				logfh << tstring;
+				linebuf = tstring;
 				switch(curmsg.msg_type){
 					case LOG_MSG_STATUS:
-						logfh << "[STATUS]	: ";
+						linebuf.append("[STATUS]	: ");
 						break;
 					case LOG_MSG_WARNING:
-						logfh << "[WARNING] : ";
+						linebuf.append("[WARNING] : ");
 						break;
 					case LOG_MSG_ERROR:
-						logfh << "[ERROR] : ";
+						linebuf.append("[ERROR] : ");
 						break;
 					case LOG_MSG_FATAL:
-						logfh << "[FATAL ERROR] :";
+						linebuf.append("[FATAL ERROR] :");
 						break;
 					case LOG_MSG_OTHER:
 						break;
 					default:
-						logfh << "[INVALID CODE] : ";
+						linebuf.append("[INVALID CODE] : ");
 						break;
 				};
-				logfh << curmsg.msg << std::endl;
-				
+				linebuf.append(curmsg.msg);
+				logfh << linebuf << std::endl;
 			}
 			this->msgBuffer.pop();
 		};
 	};
 	
-	logger(){
-		std::string logpath = "/Users/Albert/software/Logger/";
-		this->logFilename = logpath + "project_log.txt";
-		this->debugLevel = LOG_MSG_WARNING;
-		logfh.open(logFilename);
+	logger(std::string logLocation="project_log.txt", int debugLevel=LOG_MSG_ERROR){
+		this->logLocation = logLocation;
+		this->debugLevel = debugLevel;
+		
+		logfh.open(logLocation);
 		if(!logfh.is_open()){
 			std::cout << "[FATAL ERROR] : Unable to start error logger" << std::endl;
 		}
