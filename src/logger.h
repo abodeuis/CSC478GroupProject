@@ -51,21 +51,21 @@ public:
 				linebuf = tstring;
 				switch(curmsg.msg_type){
 					case LOG_MSG_STATUS:
-						linebuf.append("[STATUS]	: ");
+						linebuf.append("[STATUS]\t: ");
 						break;
 					case LOG_MSG_WARNING:
-						linebuf.append("[WARNING] : ");
+						linebuf.append("[WARNING]\t: ");
 						break;
 					case LOG_MSG_ERROR:
-						linebuf.append("[ERROR] : ");
+						linebuf.append("[ERROR]\t: ");
 						break;
 					case LOG_MSG_FATAL:
-						linebuf.append("[FATAL ERROR] :");
+						linebuf.append("[FATAL ERROR]\t:");
 						break;
 					case LOG_MSG_OTHER:
 						break;
 					default:
-						linebuf.append("[INVALID CODE] : ");
+						linebuf.append("[INVALID CODE]\t: ");
 						break;
 				};
 				linebuf.append(curmsg.msg);
@@ -87,6 +87,7 @@ public:
 	}
 	
 	~logger() {
+		this->log_msg(LOG_MSG_STATUS, "Logger exiting");
 		writeLog();
 		logfh.close();
 	}
