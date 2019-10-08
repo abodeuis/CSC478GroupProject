@@ -17,6 +17,7 @@
 #endif
 
 #include <string>
+#include <sstream>
 #include <vector>
 #include "vec.h"
 
@@ -77,59 +78,37 @@ public:
 	// Attributes
 	std::string name;
 	
-	
+	// String representation of the object.
 	std::string to_string(){
-		std::string output = name;
-		output += "\n";
+		std::stringstream output;
+		output << this->name << std::endl;
 		for (std::vector<point_t>::iterator p_it = this->shape->points.begin(); p_it != this->shape->points.end(); ++p_it){
-			output += "Points: ";
-			output += std::to_string(p_it->indices.size());
-			output += "\n";
+			output << "Points: " << p_it->indices.size() << std::endl;
 			for (std::vector<index_t*>::iterator i_it = p_it->indices.begin(); i_it != p_it->indices.end(); ++i_it){
-				output += "\t";
-				output += std::to_string((*i_it)->x);
-				output += ", ";
-				output += std::to_string((*i_it)->y);
-				output += ", ";
-				output += std::to_string((*i_it)->z);
-				output += "\n";
+				output << "\t" << (*i_it)->x << "," << (*i_it)->y << ", " << (*i_it)->z << std::endl;
 			}
 		}
 		for (std::vector<line_t>::iterator l_it = this->shape->lines.begin(); l_it != this->shape->lines.end(); ++l_it){
-			output += "Line: ";
-			output += std::to_string(l_it->indices.size());
-			output += "\n";
+			output << "Line: " << l_it->indices.size() << std::endl;
 			for (std::vector<index_t*>::iterator i_it = l_it->indices.begin(); i_it != l_it->indices.end(); ++i_it){
-				output += "\t";
-				output += std::to_string((*i_it)->x);
-				output += ", ";
-				output += std::to_string((*i_it)->y);
-				output += ", ";
-				output += std::to_string((*i_it)->z);
-				output += "\n";
+				output << "\t" << (*i_it)->x << "," << (*i_it)->y << ", " << (*i_it)->z << std::endl;
 			}
 		}
-		if (this->shape->faces.size() != 0){
 		for (std::vector<face_t>::iterator f_it = this->shape->faces.begin() ; f_it != this->shape->faces.end(); ++f_it){
-			output += "Face: ";
-			output += std::to_string(f_it->indices.size());
-			output += "\n";
+			output << "Face: " << f_it->indices.size() << std::endl;
 			for (std::vector<index_t*>::iterator i_it = f_it->indices.begin(); i_it != f_it->indices.end(); ++i_it){
-				output += "\t";
-				output += std::to_string((*i_it)->x);
-				output += ", ";
-				output += std::to_string((*i_it)->y);
-				output += ", ";
-				output += std::to_string((*i_it)->z);
-				output += "\n";
+				output << "\t" << (*i_it)->x << "," << (*i_it)->y << ", " << (*i_it)->z << std::endl;
 			}
 		}
-		}
-		return output;
+		return output.str();
 	};
 	
 	mesh(){
 		this->name = "Untitled Mesh";
+	}
+	
+	~mesh(){
+		delete this->shape;
 	}
 };
 

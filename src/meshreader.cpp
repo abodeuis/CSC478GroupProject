@@ -14,137 +14,6 @@
 
 #include "meshreader.h"
 
-#define IS_SPACE(x) (((x) == ' ') || ((x) == '\t'))
-#define IS_NEW_LINE(x) (((x) == '\r') || ((x) == '\n') || ((x) == '\0'))
-
-static inline GLint parse_int(const char **token, GLint default_value = 0){
-	std::string token_cp = (*token);
-	std::string::size_type sz;
-	GLint val = default_value;
-	
-	val = std::stoi(token_cp, &sz);
-	
-	(*token) += sz;
-	return val;
-}
-
-static inline GLfloat parse_float(const char **token, GLfloat default_value = 0.0f){
-	std::string token_cp = (*token);
-	std::string::size_type sz;
-	GLfloat val = default_value;
-	
-	val = std::stof(token_cp, &sz);
-	(*token) += sz;
-	/*
-	try {
-		val = std::stof(token_cp, &sz);
-		token += sz;
-	}
-	catch (const std::invalid_argument& ia) {
-		std::string err_msg = "Invalid argument: ";
-		err_msg.append(ia.what());
-		err_msg.append("\n");
-		log->log_msg(LOG_MSG_ERROR, err_msg);
-	}
-	 */
-	
-	return val;
-};
-
-vec3 parse_vertex(const char *token){
-	vec3 vertex;
-	
-	vertex.x = parse_float(&token);
-	vertex.y = parse_float(&token);
-	vertex.z = parse_float(&token);
-	
-	// Debugging
-	/*
-	std::string sts_msg = "v ";
-	sts_msg += std::to_string(vertex.x);
-	sts_msg += ", ";
-	sts_msg += std::to_string(vertex.y);
-	sts_msg += ", ";
-	sts_msg += std::to_string(vertex.z);
-	log->log_msg(LOG_MSG_OTHER, sts_msg);
-	*/
-	return vertex;
-};
-
-vec2 parse_texcoord(const char *token){
-	vec2 texcoord;
-	
-	texcoord.x = parse_float(&token);
-	texcoord.y = parse_float(&token);
-	
-	// Debugging
-	/*
-	std::string sts_msg = "vt ";
-	sts_msg += std::to_string(texcoord.x);
-	sts_msg += ", ";
-	sts_msg += std::to_string(texcoord.y);
-	log->log_msg(LOG_MSG_OTHER, sts_msg);
-	*/
-	
-	return texcoord;
-}
-
-vec3 parse_normal(const char *token){
-	vec3 normal;
-	
-	normal.x = parse_float(&token);
-	normal.y = parse_float(&token);
-	normal.z = parse_float(&token);
-	
-	// Debugging
-	/*
-	std::string sts_msg = "vn ";
-	sts_msg += std::to_string(normal.x);
-	sts_msg += ", ";
-	sts_msg += std::to_string(normal.y);
-	sts_msg += ", ";
-	sts_msg += std::to_string(normal.z);
-	log->log_msg(LOG_MSG_OTHER, sts_msg);
-	*/
-	
-	return normal;
-}
-
-// See
-// http://stackoverflow.com/questions/6089231/getting-std-ifstream-to-handle-lf-cr-and-crlf
-std::istream& safeGetline(std::istream& is, std::string& t)
-{
-	t.clear();
-	
-	// The characters in the stream are read one-by-one using a std::streambuf.
-	// That is faster than reading them one-by-one using the std::istream.
-	// Code that uses streambuf this way must be guarded by a sentry object.
-	// The sentry object performs various tasks,
-	// such as thread synchronization and updating the stream state.
-	
-	std::istream::sentry se(is, true);
-	std::streambuf* sb = is.rdbuf();
-	
-	for(;;) {
-		int c = sb->sbumpc();
-		switch (c) {
-			case '\n':
-				return is;
-			case '\r':
-				if(sb->sgetc() == '\n')
-					sb->sbumpc();
-				return is;
-			case std::streambuf::traits_type::eof():
-				// Also handle the case when the last line has no line ending
-				if(t.empty())
-					is.setstate(std::ios::eofbit);
-				return is;
-			default:
-				t += (char)c;
-		}
-	}
-}
-
 bool objReader::parse_file(const char *filename, mesh *m){
 	// Clear any old shape data
 	delete m->shape;
@@ -192,7 +61,7 @@ bool objReader::parse_file(const char *filename, mesh *m){
 		if(token[0] == 'v' && IS_SPACE(token[1])) {
 			token += 2;
 			
-			vertices.push_back(parse_vertex(token));
+			vertices.push_back(parse_float3(token));
 			continue;
 		}
 		
@@ -200,7 +69,7 @@ bool objReader::parse_file(const char *filename, mesh *m){
 		if(token[0] == 'v' && token[1] == 't' && IS_SPACE(token[2])) {
 			token += 3;
 			
-			texcoords.push_back(parse_texcoord(token));
+			texcoords.push_back(parse_float2(token));
 			continue;
 		}
 		
@@ -208,7 +77,7 @@ bool objReader::parse_file(const char *filename, mesh *m){
 		if(token[0] == 'v' && token[1] == 'n' && IS_SPACE(token[2])){
 			token += 3;
 			
-			normals.push_back(parse_normal(token));
+			normals.push_back(parse_float3(token));
 			continue;
 		}
 		
@@ -216,7 +85,7 @@ bool objReader::parse_file(const char *filename, mesh *m){
 		if(token[0] == 'v' && token[1] == 'p' && IS_SPACE(token[2])){
 			token += 3;
 			
-			parameters.push_back(parse_texcoord(token));
+			parameters.push_back(parse_float2(token));
 			continue;
 		}
 		
