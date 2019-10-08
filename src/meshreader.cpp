@@ -61,7 +61,7 @@ bool objReader::parse_file(const char *filename, mesh *m){
 		if(token[0] == 'v' && IS_SPACE(token[1])) {
 			token += 2;
 			
-			vertices.push_back(parse_float3(token));
+			vertices.push_back(parse_float3(&token));
 			continue;
 		}
 		
@@ -69,7 +69,7 @@ bool objReader::parse_file(const char *filename, mesh *m){
 		if(token[0] == 'v' && token[1] == 't' && IS_SPACE(token[2])) {
 			token += 3;
 			
-			texcoords.push_back(parse_float2(token));
+			texcoords.push_back(parse_float2(&token));
 			continue;
 		}
 		
@@ -77,7 +77,7 @@ bool objReader::parse_file(const char *filename, mesh *m){
 		if(token[0] == 'v' && token[1] == 'n' && IS_SPACE(token[2])){
 			token += 3;
 			
-			normals.push_back(parse_float3(token));
+			normals.push_back(parse_float3(&token));
 			continue;
 		}
 		
@@ -85,7 +85,7 @@ bool objReader::parse_file(const char *filename, mesh *m){
 		if(token[0] == 'v' && token[1] == 'p' && IS_SPACE(token[2])){
 			token += 3;
 			
-			parameters.push_back(parse_float2(token));
+			parameters.push_back(parse_float2(&token));
 			continue;
 		}
 		

@@ -1,4 +1,4 @@
-newmtl cube
+newmtl testcube
   Ns 10.0000
   Ni 1.5000
   d 1.0000
@@ -9,5 +9,5 @@ newmtl cube
   Kd 0.5880 0.5880 0.5880
   Ks 0.0000 0.0000 0.0000
   Ke 0.0000 0.0000 0.0000
-  map_Ka cube.png
-  map_Kd cube.png
+  map_Ka -blendu on -blendv off -bm 0.666667 -boost 5.000000 -cc on -clamp on -imfchan r -mm 0.333334 0.666667 -o 0.500000 0.500000 0.500000 -s 0.500000 0.500000 0.500000 -t 0.500000 0.500000 0.500000 testcube.png
+  map_Kd testcube.png

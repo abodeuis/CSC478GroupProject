@@ -45,6 +45,22 @@ typedef struct texture_option_t{
 	vec3 turbulence;				// -t u [v [w]] (default 0 0 0)
 	//int texture_resolution;			// -texres resolution (default = -1, meaning off)
 	
+	std::string to_string(){
+		std::stringstream output;
+		output << "blendu : " << this->blendu << std::endl;
+		output << "blendv : " << this->blendv << std::endl;
+		output << "bm : " << this->bump_multiplier << std::endl;
+		output << "boost : " << this->sharpness << std::endl;
+		output << "cc : " << this->color_correction << std::endl;
+		output << "clamp : " << this->clamp << std::endl;
+		output << "imfchan : " << this->imfchan << std::endl;
+		output << "mm : " << this->brightness << " " << this->contrast << std::endl;
+		output << "o : " << this->origin_offset.x << " " << this->origin_offset.y << " " << this->origin_offset.z << std::endl;
+		output << "s : " << this->scale.x << " " << this->scale.y << " " << this->scale.z << std::endl;
+		output << "t : " << this->turbulence.x << " " << this->turbulence.y << " " << this->turbulence.z << std::endl;
+		return output.str();
+	}
+	
 	texture_option_t(){
 		this->blendu = true;
 		this->blendv = true;
@@ -160,6 +176,10 @@ public:
 			output << "\tReflection texture map   : " << this->reflection_filename << std::endl;
 		}
 		return output.str();
+	}
+	
+	material(){
+		this->name = "Untitled_Material";
 	}
 	
 };

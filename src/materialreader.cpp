@@ -7,15 +7,16 @@
 //
 
 #include "materialreader.h"
+#include <iostream>
 
 static inline bool parse_OnOff(const char **token, bool default_value = true){
 	(*token) += strspn((*token), " \t");		// Trim Whitespace
 	bool output = default_value;
-	if((*token[0]) == 'o' && (*token[1]) == 'n' && IS_SPACE((*token[2]))){
+	if((0 == strncmp((*token), "on", 2))){
 		(*token) += 3;
 		output = true;
 	}
-	else if((*token[0]) == 'o' && (*token[1]) == 'f' && (*token[1]) == 'f' && IS_SPACE((*token[2]))){
+	else if((0 == strncmp((*token), "off", 3))){
 		(*token) += 4;
 		output = false;
 	}
@@ -46,7 +47,7 @@ bool parseTextureNameAndOption(const char *token, std::string *m_filename, textu
 		// Bump map multiplier
 		// -bm mult
 		if (0 == strncmp(token, "-bm", 3) && IS_SPACE(token[3])){
-			token += 2;
+			token += 4;
 			
 			m_texoption->bump_multiplier = parse_float(&token);
 			continue;
@@ -82,6 +83,7 @@ bool parseTextureNameAndOption(const char *token, std::string *m_filename, textu
 			
 			token += strspn(token, " \t");				// Trim Whitespace
 			m_texoption->imfchan = token[0];
+			token += 1;
 			continue;
 		}
 		// Modifies range of color values such that [base .. gain] is the valid values.
@@ -98,7 +100,7 @@ bool parseTextureNameAndOption(const char *token, std::string *m_filename, textu
 		if (0 == strncmp(token, "-o", 2) && IS_SPACE(token[2])){
 			token += 3;
 			
-			m_texoption->origin_offset = parse_float3(token);
+			m_texoption->origin_offset = parse_float3(&token);
 			continue;
 		}
 		// Scale texture map
@@ -106,7 +108,7 @@ bool parseTextureNameAndOption(const char *token, std::string *m_filename, textu
 		if (0 == strncmp(token, "-s", 2) && IS_SPACE(token[2])){
 			token += 3;
 			
-			m_texoption->scale = parse_float3(token);
+			m_texoption->scale = parse_float3(&token);
 			continue;
 		}
 		// Turbulence, adds varience to texture map to reduce effects of tiling
@@ -114,7 +116,7 @@ bool parseTextureNameAndOption(const char *token, std::string *m_filename, textu
 		if (0 == strncmp(token, "-t", 2) && IS_SPACE(token[2])){
 			token += 3;
 			
-			m_texoption->turbulence = parse_float3(token);
+			m_texoption->turbulence = parse_float3(&token);
 			continue;
 		}
 		// Texture Resolution, specifies the resolution of texture
@@ -177,7 +179,13 @@ bool mtlReader::parse_file(const char *filename, material *m) {
 		
 		/* ### Material name statement ### */
 		// newmtl : name
-		if(0 == strcmp(token,"newmtl")){
+		if(0 == strncmp(token,"newmtl", 6) && token[6]){
+			token += 7;
+			
+			token += strspn(token, " \t");				// Trim Whitespace
+			std::string convert(token);
+			m->name = convert;
+			token += m->name.length();
 			continue;
 		}
 		
@@ -189,7 +197,7 @@ bool mtlReader::parse_file(const char *filename, material *m) {
 		if(token[0] == 'K' && token[1] == 'a' && IS_SPACE(token[2])){
 			token += 3;
 			
-			m->ambient = parse_float3(token);
+			m->ambient = parse_float3(&token);
 			continue;
 		}
 		
@@ -200,7 +208,7 @@ bool mtlReader::parse_file(const char *filename, material *m) {
 		if(token[0] == 'K' && token[1] == 'd' && IS_SPACE(token[2])){
 			token += 3;
 			
-			m->diffuse = parse_float3(token);
+			m->diffuse = parse_float3(&token);
 			continue;
 		}
 		
@@ -211,7 +219,7 @@ bool mtlReader::parse_file(const char *filename, material *m) {
 		if(token[0] == 'K' && token[1] == 's' && IS_SPACE(token[2])){
 			token += 3;
 			
-			m->specular = parse_float3(token);
+			m->specular = parse_float3(&token);
 			continue;
 		}
 		
@@ -223,7 +231,7 @@ bool mtlReader::parse_file(const char *filename, material *m) {
 		   (token[0] == 'T' && token[1] == 'f' && IS_SPACE(token[2]))){
 			token += 3;
 			
-			m->transmittance = parse_float3(token);
+			m->transmittance = parse_float3(&token);
 			continue;
 		}
 		
@@ -384,7 +392,7 @@ bool mtlReader::parse_file(const char *filename, material *m) {
 		if(token[0] == 'K' && token[1] == 'e' && IS_SPACE(token[2])){
 			token += 3;
 			
-			m->emission = parse_float3(token);
+			m->emission = parse_float3(&token);
 			continue;
 		}
 		
