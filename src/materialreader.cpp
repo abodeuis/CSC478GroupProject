@@ -7,7 +7,6 @@
 //
 
 #include "materialreader.h"
-#include <iostream>
 
 static inline bool parse_OnOff(const char **token, bool default_value = true){
 	(*token) += strspn((*token), " \t");		// Trim Whitespace
@@ -507,6 +506,10 @@ bool mtlReader::parse_file(const char *filename, material *m) {
 		}
 		
 	}
+	
+	status_msg = "Finished reading : ";
+	status_msg += filename;
+	log->log_msg(LOG_MSG_STATUS, status_msg);
 	
 	return true;
 }

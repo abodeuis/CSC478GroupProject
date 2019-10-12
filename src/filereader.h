@@ -92,6 +92,15 @@ static inline GLfloat parse_float(const char **token, GLfloat default_value = 0.
 	return val;
 };
 
+static inline vec2 parse_float2(const char **token){
+	vec2 vec;
+	
+	vec.x = parse_float(token);
+	vec.y = parse_float(token);
+	
+	return vec;
+}
+
 static inline vec3 parse_float3(const char **token){
 	vec3 vec;
 	
@@ -102,14 +111,7 @@ static inline vec3 parse_float3(const char **token){
 	return vec;
 }
 
-static inline vec2 parse_float2(const char **token){
-	vec2 vec;
-	
-	vec.x = parse_float(token);
-	vec.y = parse_float(token);
-	
-	return vec;
-}
+
 
 class fileReader {
 	

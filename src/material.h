@@ -19,17 +19,6 @@
 #include <string>
 #include <sstream>
 
-typedef enum {
-	TEXTURE_TYPE_NONE,  // default
-	TEXTURE_TYPE_SPHERE,
-	TEXTURE_TYPE_CUBE_TOP,
-	TEXTURE_TYPE_CUBE_BOTTOM,
-	TEXTURE_TYPE_CUBE_FRONT,
-	TEXTURE_TYPE_CUBE_BACK,
-	TEXTURE_TYPE_CUBE_LEFT,
-	TEXTURE_TYPE_CUBE_RIGHT
-} texture_type_t;
-
 typedef struct texture_option_t{
 	bool blendu;					// -blendu (default on)
 	bool blendv;					// -blendv (default on)

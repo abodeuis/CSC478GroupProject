@@ -213,6 +213,9 @@ bool objReader::parse_file(const char *filename, mesh *m){
 	 POSSIBLE MEMORY LEAK IF INGORED
 	 ANY ERROR HANDLING THAT is ADDED NEEDS TO DECIDE WEATHER TO DELETE THE "shape" POINTER!!
 	*/
+	status_msg = "Finished reading : ";
+	status_msg += filename;
+	log->log_msg(LOG_MSG_STATUS, status_msg);
 	
 	return true;
 };
