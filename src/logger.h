@@ -2,7 +2,6 @@
 //  logger.h
 //
 //  Created by Albert Bode on 9/12/19.
-//  Copyright © 2019 Albert Bode. All rights reserved.
 //
 
 #ifndef logger_h
