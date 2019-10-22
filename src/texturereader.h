@@ -53,23 +53,22 @@ static inline void rgbatorgba(unsigned char *r_buf,unsigned char *g_buf,unsigned
 	}
 }
 
-class texturereader : fileReader {
+class textureReader : fileReader {
 public:
 	virtual bool parse_file(const char *filename, texture2D_t *t){return false;};
 };
 
-class pngreader : texturereader {
+class pngReader : textureReader {
 public:
 	bool parse_file(const char *filename, texture2D_t *t);
 };
 
-/* The sgi format coves .sgi, .rgb, .rgba, .bw, .int and .inta extensions */
-class sgireader : texturereader {
+class sgiReader : textureReader {
 public:
 	bool parse_file(const char *filename, texture2D_t *t);
 };
 
-class bmpreader : texturereader {
+class bmpReader : textureReader {
 public:
 	bool parse_file(const char *filename, texture2D_t *t);
 };

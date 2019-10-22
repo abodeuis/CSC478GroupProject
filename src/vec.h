@@ -24,6 +24,7 @@ typedef struct vec3 {
 		return vec3((lhs.x+rhs.x),(lhs.y+rhs.y),(lhs.z+rhs.z));
 	}
 	
+	// Subtraction Operator
 	friend vec3 operator-(const vec3& lhs, const vec3& rhs){
 		return vec3((lhs.x-rhs.x),(lhs.y-rhs.y),(lhs.z-rhs.z));
 	}
@@ -82,6 +83,7 @@ typedef struct vec2 {
 		return vec2((lhs.x+rhs.x),(lhs.y+rhs.y));
 	}
 	
+	// Subtraction Operator
 	friend vec2 operator-(const vec2& lhs, const vec2& rhs){
 		return vec2((lhs.x-rhs.x),(lhs.y-rhs.y));
 	}

@@ -125,7 +125,7 @@ static void get_row(FILE *in, sgiheader *h, unsigned char *buf, int y, int z){
 	}
 }
 
-bool sgireader::parse_file(const char *filename, texture2D_t *t){
+bool sgiReader::parse_file(const char *filename, texture2D_t *t){
 	// Clear any old shape data
 	delete t->texels;
 	
@@ -164,6 +164,16 @@ bool sgireader::parse_file(const char *filename, texture2D_t *t){
 		convert_short(&header->magic, 6);
 		convert_Uint(&header->pixmin, 1);
 		convert_Uint(&header->pixmax, 1);
+	}
+	
+	// Check file has correct checknum before proceding (aka is a real sgi file)
+	unsigned short checknum = 474;	// Will always be 474 for real sgi files
+	if (header->magic != checknum){
+		std::string log_msg = filename;
+		log_msg += " could not be read as an sgi formatted file\n";
+		log_msg += "Possibly Corrupted";
+		log->log_msg(LOG_MSG_ERROR, log_msg);
+		return false;
 	}
 	
 	// If RLE encoding is present read in offset data
