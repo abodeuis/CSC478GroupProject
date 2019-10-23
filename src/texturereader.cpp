@@ -199,8 +199,7 @@ bool sgiReader::parse_file(const char *filename, texture2D_t *t){
 		}
 	}
 
-
-
+	// For debugging bad sgi files
 	std::stringstream ss;
 	ss << "\n\tMagic : " << header->magic << std::endl;
 	ss << "\tType    : " << header->type << std::endl;
@@ -215,12 +214,13 @@ bool sgiReader::parse_file(const char *filename, texture2D_t *t){
 		ss << "\tRow Size  : " << (*header->row_size) << std::endl;
 		ss << "\tRLE End   : " << header->rleEnd << std::endl;
 	}
-	log_f->log_msg(LOG_MSG_OTHER, ss.str());
+	log_f->log_msg(LOG_MSG_DEBUG2, ss.str());
 	log_f->writeLog();
 
 	// Pixel data reading
 	// Initalize line buffers
-	unsigned *texels = (unsigned *)malloc(header->xsize*header->ysize*sizeof(unsigned));
+	//int glsize = header->xsize*header->ysize*sizeof(unsigned);
+	t->texels = (unsigned *)malloc(header->xsize*header->ysize*sizeof(unsigned));
 	unsigned char *r_buf = (unsigned char *)malloc(header->xsize*256);
 	unsigned char *b_buf = (unsigned char *)malloc(header->xsize*256);
 	unsigned char *g_buf = (unsigned char *)malloc(header->xsize*256);
@@ -230,7 +230,7 @@ bool sgiReader::parse_file(const char *filename, texture2D_t *t){
 		log_f->log_msg(LOG_MSG_FATAL, "Out of memory!");
 		exit(1);
 	}
-	unsigned *line_ptr = texels;
+	unsigned *line_ptr = t->texels;
 	for (int y=0; y<header->ysize; y++){
 		// RGBA image
 		if(header->zsize >= 4) {
@@ -259,9 +259,21 @@ bool sgiReader::parse_file(const char *filename, texture2D_t *t){
 			line_ptr += header->xsize;
 		}
 	}
+	t->width = header->xsize;
+	t->height = header->ysize;
+	t->pixeltype = header->dim;
+	t->pixelformat = GL_RGBA;
 
-	t->texels = texels;
-
+	/*
+	line_ptr = t->texels;
+	for (int y=0;y<header->ysize; y++){
+		for (int x=0;x<header->xsize; x++){
+			std::cout << y << "," << x << " : " << (*line_ptr) << std::endl;
+			line_ptr++;
+		}
+	}
+	 */
+	
 	fclose(in);
 
 	free(header);
@@ -269,7 +281,11 @@ bool sgiReader::parse_file(const char *filename, texture2D_t *t){
 	free(b_buf);
 	free(g_buf);
 	free(a_buf);
-	free(texels);
+	//free(texels);
+	
+	status_msg = "Finished reading : ";
+	status_msg += filename;
+	log_f->log_msg(LOG_MSG_STATUS, status_msg);
 
 	return true;
 };

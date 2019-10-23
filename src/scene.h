@@ -49,6 +49,9 @@ public:
 
 		// Draw scene objects
 		for (std::vector<sceneObject*>::iterator it = objects.begin(); it != objects.end(); it++){
+			if((*it)->name == "cube"){
+				(*it)->transform.rotate(0.25, 0.25, 0.25);
+			}
 			(*it)->execute();
 		}
 
@@ -78,7 +81,7 @@ public:
 		mainCamera->transform.set_location(0, 0, -10);
 		sceneObject *default_cube = new sceneObject("Cube", get_next_pid());
 		meshComponent *mc = new meshComponent();
-		default_cube->transform.set_location(2,2,-6);
+		default_cube->transform.set_location(0.5,0.5,-3);
 		default_cube->name = "cube";
 		default_cube->components["mesh"] = mc;
 		default_cube->components["meshRenderer"] = new meshRendererComponent(mc);

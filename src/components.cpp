@@ -50,12 +50,26 @@ void meshComponent::execute(){
 }
 
 void meshRendererComponent::execute(){
-	glColor4f(this->meshcolor.red, this->meshcolor.green, this->meshcolor.blue, this->meshcolor.alpha);
-	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+	// Set color of the object if enabled
+	if (enableColor){
+		glColor4f(this->meshcolor.red, this->meshcolor.green, this->meshcolor.blue, this->meshcolor.alpha);
+	}
+	
+	// Draw Material if there is one
+	if (this->mat != NULL){
+		glShadeModel( GL_SMOOTH );
+		GLfloat mat_diffuse[] = {this->mat->diffuse.x,this->mat->diffuse.y,this->mat->diffuse.z, 1.0f};
+		GLfloat specular[] = {this->mat->specular.x,this->mat->specular.y,this->mat->specular.z, 1.0f};
+		glMaterialfv( GL_FRONT, GL_DIFFUSE, mat_diffuse);
+		glMaterialfv( GL_FRONT, GL_SPECULAR, specular);
+		glMaterialfv( GL_FRONT, GL_SHININESS, &this->mat->shininess);
+		
+		glEnable( GL_TEXTURE_2D );
+		glBindTexture(GL_TEXTURE_2D, assets->get_texture_asset("brick")->GL_TEXT_ID);
+	}
 
-	//glEnable( GL_TEXTURE_2D );
-	//glBindTexture(GL_TEXTURE_2D, material->texels);
-
+	// Draw Geometry of the object
+	glPolygonMode( GL_FRONT_AND_BACK, this->polymode );
 	glBegin( GL_TRIANGLES );
 	for (std::vector<face_t>::iterator face = this->associated_mesh->m->shape->faces.begin(); face != this->associated_mesh->m->shape->faces.end(); face++ ){
 		for (std::vector<index_t*>::iterator index = face->indices.begin(); index != face->indices.end(); index++){
@@ -65,8 +79,11 @@ void meshRendererComponent::execute(){
 		}
 	}
 	glEnd();
-
-	//glDisable( GL_TEXTURE_2D );
+	
+	// End Material if there is one
+	if (this->mat != NULL){
+		glDisable( GL_TEXTURE_2D );
+	}
 }
 
 /*

@@ -141,8 +141,10 @@ public:
 	meshComponent* associated_mesh;	 // The meshComponent that this is trying to render
 	
 	color meshcolor;
-	material mat;
-	bool enableLighting;
+	material *mat;
+	bool enableLighting;	// Enable or disable lighting on the object
+	bool enableColor;		// Enable or disable color on the object
+	GLint polymode;			// GL_POINT, GL_LINE, GL_FILL for points, wireframe, and solid polygons
 
 	// Functions
 public:
@@ -151,8 +153,11 @@ public:
 	meshRendererComponent(meshComponent* associated_mesh, bool lighting=true){
 		this->associated_mesh = associated_mesh;
 		this->enableLighting = lighting;
-		this->meshcolor = color("Firebrick");
-		this->mat = material();
+		this->polymode = GL_FILL;
+		this->enableColor = false;
+		this->meshcolor = color("firebrick", 0.5f);
+		//this->mat = NULL;
+		this->mat = assets->get_material_asset("cube");
 	}
 };
 

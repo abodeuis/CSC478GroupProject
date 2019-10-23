@@ -9,6 +9,13 @@
 #ifndef assetmanager_h
 #define assetmanager_h
 
+// Cross platform include statement for glut library
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+
 #include <map>
 #include <string>
 
@@ -24,15 +31,20 @@ class assetmanager{
 private:
 	// Attributes
 	unsigned long allocatedMemory;
+	GLint cur_text_id;
 	
 	// Each asset must have a unique id, and each asset type has its own idspace
 	std::map<std::string, mesh*> meshes;
 	std::map<std::string, material*> materials;
 	std::map<std::string, texture2D_t*> textures;
 	
-	void load_primitives();
-public:
+	
 	// Functions
+private:
+	void load_primitives();
+	GLint next_text_id();
+	
+public:
 	unsigned long get_allocated_size(){return allocatedMemory;}
 	
 	bool change_mesh_asset_name(std::string cur_name, std::string new_name);

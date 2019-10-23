@@ -18,6 +18,10 @@ void assetmanager::load_primitives(){
 
 }
 
+GLint assetmanager::next_text_id(){
+	return this->cur_text_id++;
+}
+
 bool assetmanager::change_mesh_asset_name(std::string cur_name, std::string new_name){
 	// Check if new name is not in use, if so go ahead and change it
 	if (meshes[new_name]){
@@ -164,6 +168,7 @@ void assetmanager::add_material_asset(const char *filename, std::string asset_na
 
 void assetmanager::add_texture_asset(const char *filename, std::string asset_name){
 	std::string token = filename;
+	token += "  ";
 	const char *ext = token.substr(token.find_last_of(".")+1).c_str();
 
 	// bmp
@@ -219,6 +224,24 @@ void assetmanager::add_texture_asset(const char *filename, std::string asset_nam
 			 }
 			 }
 			 */
+			
+			/*
+			unsigned *line_ptr = t->texels;
+			for (int y=0;y<t->height; y++){
+				for (int x=0;x<t->width; x++){
+					std::cout << y << "," << x << " : " << (*line_ptr) << std::endl;
+					line_ptr++;
+				}
+			}
+			 */
+			// Add texture to GL
+			GLuint tex_num;
+			glGenTextures(1, &tex_num);
+			glBindTexture(GL_TEXTURE_2D, tex_num);
+			glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, t->width, t->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, t->texels);
+			glGenerateMipmap( GL_TEXTURE_2D );
+			t->GL_TEXT_ID = tex_num;
+			
 			// When not in use name is found assign it
 			if (!asset_name.empty()){
 				textures[asset_name] = t;
@@ -226,6 +249,7 @@ void assetmanager::add_texture_asset(const char *filename, std::string asset_nam
 			else {
 				textures[default_name] = t;
 			}
+			
 		}
 	}
 

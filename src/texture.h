@@ -23,6 +23,7 @@ class texture2D_t {
 public:
 	// texture name
 	std::string name;
+	GLint GL_TEXT_ID;
 	
 	GLint width;
 	GLint height;
@@ -40,7 +41,7 @@ public:
 	}
 	
 	~texture2D_t(){
-		//if (texels) delete [] texels;
+		if (this->texels != nullptr){free(texels);};
 	}
 };
 

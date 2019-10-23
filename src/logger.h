@@ -13,11 +13,14 @@
 #include <string.h>
 #include <queue>
 
-#define LOG_MSG_STATUS 4
-#define LOG_MSG_WARNING 3
-#define LOG_MSG_ERROR 2
-#define LOG_MSG_FATAL 1
 #define LOG_MSG_OTHER 0
+#define LOG_MSG_FATAL 1
+#define LOG_MSG_ERROR 2
+#define LOG_MSG_WARNING 3
+#define LOG_MSG_STATUS 4
+#define LOG_MSG_DEBUG1 5
+#define LOG_MSG_DEBUG2 6
+#define LOG_MSG_DEBUG3 7
 
 typedef struct logger {
 	struct logMsg{
@@ -38,7 +41,7 @@ private:
 public:
 	void set_logfile(std::string filelocation){this->writeLog();this->logLocation = filelocation;};
 	void set_debug_level(int debugLevel){this->writeLog();this->debugLevel = debugLevel;};
-	void log_msg(int msg_type, const std::string& msg){this->msgBuffer.push(logMsg(msg_type,msg));if (msgBuffer.size() > 10){this->writeLog();}};
+	void log_msg(int msg_type, const std::string& msg){this->msgBuffer.push(logMsg(msg_type,msg));this->writeLog();};
 	void writeLog(){
 		while(!this->msgBuffer.empty()){
 			logMsg curmsg = this->msgBuffer.front();
@@ -49,6 +52,11 @@ public:
 				std::strftime(tstring, sizeof(tstring), "[%H:%M:%S]", std::localtime(&t));
 				linebuf = tstring;
 				switch(curmsg.msg_type){
+					case LOG_MSG_DEBUG1:
+					case LOG_MSG_DEBUG2:
+					case LOG_MSG_DEBUG3:
+						linebuf.append("[DEBUG]\t: ");
+						break;
 					case LOG_MSG_STATUS:
 						linebuf.append("[STATUS]\t: ");
 						break;
