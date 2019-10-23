@@ -15,12 +15,12 @@
 
 #include <string>
 
-extern logger *log;
+extern logger *log_f;
 
 class meshReader : fileReader {
 public:
 	bool triangulate;		// Should the file be reduced to triangles?
-	
+
 	virtual bool parse_file(const char *filename, mesh *m){return false;};
 };
 

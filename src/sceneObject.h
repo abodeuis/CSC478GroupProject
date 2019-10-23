@@ -23,19 +23,20 @@
 #include "components.h"
 
 class sceneObject {
+public:
 	std::string name;
-	
+
 	bool selectable;					// If object is valid to select
 	int tag;			// enum of possible tags probably
 public:
 	int pid;							// picking id
 	transformComponent transform;
 	std::map<std::string, baseComponent*> components;
-	
+
 	void add_component(baseComponent* component){
-		
+
 	}
-	
+
 public:
 	// Functions
 	void execute(){
@@ -46,38 +47,38 @@ public:
 		// 3 : Any non-rendering componets, such as lights should be added
 		// 4 : Render mesh of object
 		// 5 : Reload the pre-draw matrix (final step)
-		
+
 		// 0 : Logic components
-		
-		
+
+
 		// 1 :
 		glLoadName(pid);
-		
+
 		glPushMatrix();
 
-		
+
 		if(components["camera"]){
 			components["camera"]->execute();
 		}
-		
+
 		// 2 : Translate
 		transform.execute();
-		
+
 		// 3 : Non-physical geometry components
 		/*
 		if(lightComponent in components){
 			lightComponent->execute();
 		}
 		 */
-		
-		
+
+
 		// 4 : Physical geometry components
 		if(components["meshRenderer"]){
 			components["meshRenderer"]->execute();
 		}
 		glPopMatrix();
 	};
-	
+
 	sceneObject(std::string name = "Untitled Object", int pid=0){
 		this->name = name;
 		this->pid = pid;

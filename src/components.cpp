@@ -24,7 +24,7 @@ void transformComponent::execute(){
 void cameraComponent::execute(){
 	// Default Background color
 	glClearColor( backgroundcolor.red, backgroundcolor.green, backgroundcolor.blue, backgroundcolor.alpha );
-	
+
 	glMatrixMode( GL_PROJECTION );
 	glLoadIdentity();
 	if ( this->projectionMode == CC_PERSPECTIVE ){
@@ -37,7 +37,7 @@ void cameraComponent::execute(){
 	else {
 		std::string log_msg = "Invalid projectionMode : ";
 		log_msg += projectionMode;
-		log->log_msg(LOG_MSG_ERROR, log_msg);
+		log_f->log_msg(LOG_MSG_ERROR, log_msg);
 	}
 	glMatrixMode( GL_MODELVIEW );
 	glLoadIdentity();
@@ -52,10 +52,10 @@ void meshComponent::execute(){
 void meshRendererComponent::execute(){
 	glColor4f(this->meshcolor.red, this->meshcolor.green, this->meshcolor.blue, this->meshcolor.alpha);
 	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-	
+
 	//glEnable( GL_TEXTURE_2D );
 	//glBindTexture(GL_TEXTURE_2D, material->texels);
-	
+
 	glBegin( GL_TRIANGLES );
 	for (std::vector<face_t>::iterator face = this->associated_mesh->m->shape->faces.begin(); face != this->associated_mesh->m->shape->faces.end(); face++ ){
 		for (std::vector<index_t*>::iterator index = face->indices.begin(); index != face->indices.end(); index++){
@@ -65,7 +65,7 @@ void meshRendererComponent::execute(){
 		}
 	}
 	glEnd();
-	
+
 	//glDisable( GL_TEXTURE_2D );
 }
 

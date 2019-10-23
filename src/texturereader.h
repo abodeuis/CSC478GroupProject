@@ -13,7 +13,7 @@
 #include "texture.h"
 #include "logger.h"
 
-extern logger *log;
+extern logger *log_f;
 
 static inline void bwtorgba(unsigned char *bw_buf, unsigned char *rgba_buf, int bw_buf_size){
 	while(bw_buf_size--) {

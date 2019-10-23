@@ -18,11 +18,12 @@
 
 #include <string>
 #include <sstream>
+#include <algorithm>
 
 #include "logger.h"
 #include "vec.h"
 
-extern logger *log;
+extern logger *log_f;
 
 class color{
 	// Attributes
@@ -49,16 +50,16 @@ public:
 		this->alpha = alpha;
 	}
 	void set_color(const char *color_or_hex, GLfloat alpha ); // Defined below
-	
+
 	// Default Constructor
 	color(GLfloat red=1.0f, GLfloat green=1.0f, GLfloat blue=1.0f, GLfloat alpha=1.0f){
 		this->set_color(red, green, blue, alpha);
 	};
-	
+
 	color(vec3 rgb, GLfloat alpha=1.0f){
 		this->set_color(rgb, alpha);
 	}
-	
+
 	color(const char *color_or_hex, float alpha=1.0f){
 		this->set_color(color_or_hex, alpha);
 	};

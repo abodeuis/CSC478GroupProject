@@ -19,11 +19,11 @@
 #define LOG_MSG_FATAL 1
 #define LOG_MSG_OTHER 0
 
-struct logger {
+typedef struct logger {
 	struct logMsg{
 		int msg_type;
 		std::string msg;
-		
+
 		logMsg(int msg_type, const std::string msg){
 			this->msg_type = msg_type;
 			this->msg = msg;
@@ -34,7 +34,7 @@ private:
 	std::ofstream logfh;
 	std::queue<logMsg> msgBuffer;
 	int debugLevel;
-	
+
 public:
 	void set_logfile(std::string filelocation){this->writeLog();this->logLocation = filelocation;};
 	void set_debug_level(int debugLevel){this->writeLog();this->debugLevel = debugLevel;};
@@ -73,23 +73,23 @@ public:
 			this->msgBuffer.pop();
 		};
 	};
-	
+
 	logger(std::string logLocation="project_log.txt", int debugLevel=LOG_MSG_ERROR){
 		this->logLocation = logLocation;
 		this->debugLevel = debugLevel;
-		
+
 		logfh.open(logLocation);
 		if(!logfh.is_open()){
 			std::cout << "[FATAL ERROR] : Unable to start error logger" << std::endl;
 		}
 		this->log_msg(LOG_MSG_STATUS, "Logger initalized");
 	}
-	
+
 	~logger() {
 		this->log_msg(LOG_MSG_STATUS, "Logger exiting");
 		writeLog();
 		logfh.close();
 	}
-};
+} logger;
 
 #endif /* logger_h */

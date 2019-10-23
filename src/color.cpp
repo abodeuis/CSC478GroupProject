@@ -13,16 +13,16 @@ void color::HEXtoRGB(const char *hex){
 	std::string str_hex = hex;
 	std::stringstream redss, greenss, bluess;
 	int redval, greenval, blueval;
-	
+
 	// Convert hex to integer number
 	redss << std::hex << str_hex.substr(1,2);
 	greenss << std::hex << str_hex.substr(3,2);
 	bluess << std::hex << str_hex.substr(5,2);
-	
+
 	redss >> redval;
 	greenss >> greenval;
 	bluess >> blueval;
-	
+
 	this->red = GLfloat(redval/256.0f);
 	this->green = GLfloat(greenval/256.0f);
 	this->blue = GLfloat(blueval/256.0f);
@@ -928,10 +928,10 @@ void color::set_color(const char *color_or_hex, GLfloat alpha=1.0f){
 		if (!found){
 			std::string log_msg = name;
 			log_msg += " is not in the list of colors; color is unchanged";
-			log->log_msg(LOG_MSG_WARNING, log_msg);
+			//logger->log_msg(LOG_MSG_WARNING, log_msg);
 		}
 	}
-	
+
 	// Set alpha in either case
 	this->alpha = alpha;
 };

@@ -15,7 +15,7 @@
 
 #include <string>
 
-extern logger *log;
+extern logger *log_f;
 
 class materialReader : fileReader {
 public:

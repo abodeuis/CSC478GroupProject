@@ -24,7 +24,7 @@ typedef struct _sgiheader {
 								//			RGB images would be 3
 	unsigned int pixmin;		// 32 bits, Minium pixel value of the image
 	unsigned int pixmax;		// 32 bits, Maxium pixel value of the image
-	
+
 	// Everything below this can be safely ingored but i'm leaving it in as it is part of
 	// the specification.
 	/*
@@ -36,18 +36,18 @@ typedef struct _sgiheader {
 	unsigned *dummy2;			// 404 bytes, Separator that brings the header size
 								//			to exactly 512 bytes
 	*/
-	
+
 	// RLE encodeing offset table (if file is rle encoded)
 	unsigned int *row_start;
 	int *row_size;
 	unsigned long rleEnd;
-	
+
 } sgiheader;
 
 static void convert_short(unsigned short *array, unsigned int length) {
 	unsigned short b1, b2;
 	unsigned char *ptr;
-	
+
 	ptr = (unsigned char *)array;
 	while (length--) {
 		b1 = *ptr++;
@@ -59,7 +59,7 @@ static void convert_short(unsigned short *array, unsigned int length) {
 static void convert_Uint(unsigned *array, unsigned int length) {
 	unsigned int b1, b2, b3, b4;
 	unsigned char *ptr;
-	
+
 	ptr = (unsigned char *)array;
 	while (length--) {
 		b1 = *ptr++;
@@ -74,7 +74,7 @@ static void convert_Uint(unsigned *array, unsigned int length) {
 /*
 static void convert_Uint(unsigned int *array, unsigned int length) {
 	unsigned char *ptr;
-	
+
 	ptr = (unsigned char *)array;
 	while (length--) {
 		*array++ = (ptr[3]<<0) | (ptr[2]<<8) | (ptr[1]<<16) | (ptr[0]<<24);
@@ -88,13 +88,13 @@ static void get_row(FILE *in, sgiheader *h, unsigned char *buf, int y, int z){
 		unsigned char *iPtr, *oPtr, pixel;
 		unsigned char *rle_buf = (unsigned char *)malloc(h->xsize*256);
 		int count;
-		
+
 		fseek(in, (long)h->row_start[y+z*h->ysize], SEEK_SET);
 		fread(rle_buf, 1, (unsigned int)h->row_size[y+z*h->ysize],in);
-		
+
 		iPtr = rle_buf;
 		oPtr = buf;
-		
+
 		for(;;){
 			pixel = *iPtr++;
 			count = (int)(pixel & 0x7F);
@@ -113,9 +113,9 @@ static void get_row(FILE *in, sgiheader *h, unsigned char *buf, int y, int z){
 				}
 			}
 		}
-		
+
 	}
-	
+
 	// File has no encoding
 	else {
 		// Find line start
@@ -128,9 +128,9 @@ static void get_row(FILE *in, sgiheader *h, unsigned char *buf, int y, int z){
 bool sgiReader::parse_file(const char *filename, texture2D_t *t){
 	// Clear any old shape data
 	delete t->texels;
-	
+
 	std::string text_name = "A filename";
-	
+
 	// Test for big or little endian
 	int swapFlag;
 	endianTest.testWord = 1;
@@ -139,43 +139,43 @@ bool sgiReader::parse_file(const char *filename, texture2D_t *t){
 	} else {
 		swapFlag = 0;
 	}
-	
+
 	// Open the file
 	FILE *in;
 	in = fopen(filename, "rb");
 	if (in == NULL) {
 		std::string error_msg = "Problem opening : ";
 		error_msg += filename;
-		log->log_msg(LOG_MSG_ERROR, error_msg);
+		log_f->log_msg(LOG_MSG_ERROR, error_msg);
 		return false;
 	}
-	
+
 	std::string status_msg = "Started reading : ";
 	status_msg += filename;
-	log->log_msg(LOG_MSG_STATUS, status_msg);
-	
+	log_f->log_msg(LOG_MSG_STATUS, status_msg);
+
 	// Read in File Header
 	sgiheader *header = (sgiheader *)malloc(sizeof(sgiheader));
 	fread(header, 1, 20, in);
 	int x;
-	
+
 	// Convert Header values if needed
 	if (swapFlag) {
 		convert_short(&header->magic, 6);
 		convert_Uint(&header->pixmin, 1);
 		convert_Uint(&header->pixmax, 1);
 	}
-	
+
 	// Check file has correct checknum before proceding (aka is a real sgi file)
 	unsigned short checknum = 474;	// Will always be 474 for real sgi files
 	if (header->magic != checknum){
 		std::string log_msg = filename;
 		log_msg += " could not be read as an sgi formatted file\n";
 		log_msg += "Possibly Corrupted";
-		log->log_msg(LOG_MSG_ERROR, log_msg);
+		log_f->log_msg(LOG_MSG_ERROR, log_msg);
 		return false;
 	}
-	
+
 	// If RLE encoding is present read in offset data
 	if((header->type & 0xFF00) == 0x0100){
 		// Allocate offset table
@@ -184,10 +184,10 @@ bool sgiReader::parse_file(const char *filename, texture2D_t *t){
 		header->row_size = (int *)malloc(x);
 		header->rleEnd = 512 + (2 * x);
 		if (header->row_start == NULL || header->row_size == NULL) {
-			log->log_msg(LOG_MSG_FATAL, "Out of memory!");
+			log_f->log_msg(LOG_MSG_FATAL, "Out of memory!");
 			exit(1);
 		}
-		
+
 		// Read offset table
 		fseek(in, 512, SEEK_SET);
 		fread(header->row_start, 1, x, in);
@@ -198,9 +198,9 @@ bool sgiReader::parse_file(const char *filename, texture2D_t *t){
 			convert_Uint((unsigned *)header->row_size, x/(int) sizeof(int));
 		}
 	}
-	
-	
-	
+
+
+
 	std::stringstream ss;
 	ss << "\n\tMagic : " << header->magic << std::endl;
 	ss << "\tType    : " << header->type << std::endl;
@@ -215,9 +215,9 @@ bool sgiReader::parse_file(const char *filename, texture2D_t *t){
 		ss << "\tRow Size  : " << (*header->row_size) << std::endl;
 		ss << "\tRLE End   : " << header->rleEnd << std::endl;
 	}
-	log->log_msg(LOG_MSG_OTHER, ss.str());
-	log->writeLog();
-	
+	log_f->log_msg(LOG_MSG_OTHER, ss.str());
+	log_f->writeLog();
+
 	// Pixel data reading
 	// Initalize line buffers
 	unsigned *texels = (unsigned *)malloc(header->xsize*header->ysize*sizeof(unsigned));
@@ -227,7 +227,7 @@ bool sgiReader::parse_file(const char *filename, texture2D_t *t){
 	unsigned char *a_buf = (unsigned char *)malloc(header->xsize*256);
 	// Check memory was properly allocated
 	if (r_buf == NULL || b_buf == NULL || g_buf == NULL || a_buf == NULL){
-		log->log_msg(LOG_MSG_FATAL, "Out of memory!");
+		log_f->log_msg(LOG_MSG_FATAL, "Out of memory!");
 		exit(1);
 	}
 	unsigned *line_ptr = texels;
@@ -238,7 +238,7 @@ bool sgiReader::parse_file(const char *filename, texture2D_t *t){
 			get_row(in, header, b_buf, y, 1);
 			get_row(in, header, g_buf, y, 2);
 			get_row(in, header, a_buf, y, 3);
-			
+
 			rgbatorgba(r_buf, g_buf, b_buf, a_buf, (unsigned char *)line_ptr, header->xsize);
 			line_ptr += header->xsize;
 		}
@@ -247,29 +247,29 @@ bool sgiReader::parse_file(const char *filename, texture2D_t *t){
 			get_row(in, header, r_buf, y, 0);
 			get_row(in, header, b_buf, y, 1);
 			get_row(in, header, g_buf, y, 2);
-			
+
 			rgbtorgba(r_buf, g_buf, b_buf, (unsigned char *)line_ptr, header->xsize);
 			line_ptr += header->xsize;
 		}
 		// BW
 		else {
 			get_row(in, header, a_buf, y, 0);
-			
+
 			bwtorgba(a_buf, (unsigned char *)line_ptr, header->xsize);
 			line_ptr += header->xsize;
 		}
 	}
-	
+
 	t->texels = texels;
-	
+
 	fclose(in);
-	
+
 	free(header);
 	free(r_buf);
 	free(b_buf);
 	free(g_buf);
 	free(a_buf);
 	free(texels);
-	
+
 	return true;
 };

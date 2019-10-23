@@ -12,10 +12,10 @@ void assetmanager::load_primitives(){
 	// Cube
 	this->add_mesh_asset("cube.obj", "cube");
 	// Cylinder
-	
+
 	// Sphere
-	
-	
+
+
 }
 
 bool assetmanager::change_mesh_asset_name(std::string cur_name, std::string new_name){
@@ -51,7 +51,7 @@ bool assetmanager::change_texture_asset_name(std::string cur_name, std::string n
 void assetmanager::add_mesh_asset(const char *filename, std::string asset_name=""){
 	std::string token = filename;
 	const char *ext = token.substr(token.find_last_of(".")+1).c_str();
-	
+
 	// obj
 	if (ext[0] == 'o' && ext[1] == 'b' && ext[2] == 'j'){
 		objReader mreader;
@@ -66,7 +66,7 @@ void assetmanager::add_mesh_asset(const char *filename, std::string asset_name="
 				// Check if name is in use, if so will increment by one till a valid name is found
 				while(q){
 			 if(meshes[default_name]){
-			 
+
 			 }
 				}
 				*/
@@ -79,51 +79,51 @@ void assetmanager::add_mesh_asset(const char *filename, std::string asset_name="
 			}
 		}
 	}
-	
+
 	// stl
 	else if (ext[0] == 's' && ext[1] == 't' && ext[2] == 'l'){
 		std::string logmsg = filename;
 		logmsg += " was not read\n";
 		logmsg = "stl file types are not yet implemented, but planned to be supported in a future update";
-		log->log_msg(LOG_MSG_ERROR, logmsg);
+		log_f->log_msg(LOG_MSG_ERROR, logmsg);
 		/*
 			stlReader mreader;
 			mesh *m = new mesh();
 			if (mreader.parse_file(filename, m)){
-		 
+
 			}
 			*/
 	}
-	
+
 	// 3ds
 	else if (ext[0] == '3' && ext[1] == 'd' && ext[2] == 's'){
 		std::string logmsg = filename;
 		logmsg += " was not read\n";
 		logmsg += "3ds file types are not yet implemented, but planned to be supported in a future update";
-		log->log_msg(LOG_MSG_ERROR, logmsg);
+		log_f->log_msg(LOG_MSG_ERROR, logmsg);
 		/*
 			threedsReader mreader;
 			mesh *m = new mesh();
 			if (mreader.parse_file(filename, m)){
-		 
+
 			}
 			*/
 	}
-	
+
 	// Unsupported file type
 	else {
 		std::string logmsg = filename;
 		logmsg += " was not read\n";
 		logmsg += "Unsupported file type : ";
 		logmsg += ext;
-		log->log_msg(LOG_MSG_ERROR, logmsg);
+		log_f->log_msg(LOG_MSG_ERROR, logmsg);
 	}
 }
 
 void assetmanager::add_material_asset(const char *filename, std::string asset_name){
 	std::string token = filename;
 	const char *ext = token.substr(token.find_last_of(".")+1).c_str();
-	
+
 	// mtl
 	if (ext[0] == 'm' && ext[1] == 't' && ext[2] == 'l'){
 		mtlReader mreader;
@@ -138,7 +138,7 @@ void assetmanager::add_material_asset(const char *filename, std::string asset_na
 			 // Check if name is in use, if so will increment by one till a valid name is found
 			 while(q){
 			 if(meshes[default_name]){
-			 
+
 			 }
 			 }
 			 */
@@ -151,51 +151,51 @@ void assetmanager::add_material_asset(const char *filename, std::string asset_na
 			}
 		}
 	}
-	
+
 	// Unsupported file type
 	else {
 		std::string logmsg = filename;
 		logmsg += " was not read\n";
 		logmsg += "Unsupported file type : ";
 		logmsg += ext;
-		log->log_msg(LOG_MSG_ERROR, logmsg);
+		log_f->log_msg(LOG_MSG_ERROR, logmsg);
 	}
 }
 
 void assetmanager::add_texture_asset(const char *filename, std::string asset_name){
 	std::string token = filename;
 	const char *ext = token.substr(token.find_last_of(".")+1).c_str();
-	
+
 	// bmp
 	if (ext[0] == 'b' && ext[1] == 'm' && ext[2] == 'p' && IS_SPACE(ext[3])){
 		std::string logmsg = filename;
 		logmsg += " was not read\n";
 		logmsg += "bmp file types are not yet implemented, but planned to be supported in a future update";
-		log->log_msg(LOG_MSG_ERROR, logmsg);
+		log_f->log_msg(LOG_MSG_ERROR, logmsg);
 		/*
 		 threedsReader mreader;
 		 mesh *m = new mesh();
 		 if (mreader.parse_file(filename, m)){
-		 
+
 		 }
 		 */
 	}
-	
+
 	// png
 	else if (ext[0] == 'p' && ext[1] == 'n' && ext[2] == 'g'&& IS_SPACE(ext[3])){
 		std::string logmsg = filename;
 		logmsg += " was not read\n";
 		logmsg += "png file types are not yet implemented, but planned to be supported in a future update";
-		log->log_msg(LOG_MSG_ERROR, logmsg);
+		log_f->log_msg(LOG_MSG_ERROR, logmsg);
 		/*
 		 threedsReader mreader;
 		 mesh *m = new mesh();
 		 if (mreader.parse_file(filename, m)){
-		 
+
 		 }
 		 */
 	}
-	
+
 	/* The sgi format covers .bw, .sgi, .rgb, .int, .rgba and .inta exts */
 	else if ((ext[0] == 'b' && ext[1] == 'w' && IS_SPACE(ext[2])) ||
 			 (ext[0] == 's' && ext[1] == 'g' && ext[2] == 'i' && IS_SPACE(ext[3])) ||
@@ -215,7 +215,7 @@ void assetmanager::add_texture_asset(const char *filename, std::string asset_nam
 			 // Check if name is in use, if so will increment by one till a valid name is found
 			 while(q){
 			 if(meshes[default_name]){
-			 
+
 			 }
 			 }
 			 */
@@ -228,14 +228,14 @@ void assetmanager::add_texture_asset(const char *filename, std::string asset_nam
 			}
 		}
 	}
-	
+
 	// Unsupported file type
 	else {
 		std::string logmsg = filename;
 		logmsg += " was not read\n";
 		logmsg += "Unsupported file type : ";
 		logmsg += ext;
-		log->log_msg(LOG_MSG_ERROR, logmsg);
+		log_f->log_msg(LOG_MSG_ERROR, logmsg);
 	}
 }
 
@@ -246,7 +246,7 @@ mesh* assetmanager::get_mesh_asset(std::string asset_name){
 	else {
 		std::string log_msg = "Trying to access non-loaded mesh : ";
 		log_msg += asset_name;
-		log->log_msg(LOG_MSG_WARNING, log_msg);
+		log_f->log_msg(LOG_MSG_WARNING, log_msg);
 		return nullptr;
 	}
 }
@@ -258,7 +258,7 @@ material* assetmanager::get_material_asset(std::string asset_name){
 	else {
 		std::string log_msg = "Trying to access non-loaded material : ";
 		log_msg += asset_name;
-		log->log_msg(LOG_MSG_WARNING, log_msg);
+		log_f->log_msg(LOG_MSG_WARNING, log_msg);
 		return nullptr;
 	}
 }
@@ -271,7 +271,7 @@ texture2D_t* assetmanager::get_texture_asset(std::string asset_name){
 	else {
 		std::string log_msg = "Trying to access non-loaded texture : ";
 		log_msg += asset_name;
-		log->log_msg(LOG_MSG_WARNING, log_msg);
+		log_f->log_msg(LOG_MSG_WARNING, log_msg);
 		return nullptr;
 	}
 }
