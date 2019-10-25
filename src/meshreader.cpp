@@ -140,18 +140,18 @@ bool objReader::parse_file(const char *filename, mesh *m){
 				token += strspn(token, " \t");						// Trim Whitespace
 				index_t *index;
 				GLint vert_num = parse_int(&token);					// Parse vertex number
-				index = new index_t(vertices[vert_num]);			// Create index;
+				index = new index_t(vertices[vert_num-1]);			// Create index;
 				if (token[0] == '/'){
 					token += 1;
 					GLint text_num = parse_int(&token);				// Parse texture number
-					vec2 texcord = texcoords[text_num];				// Add data to index
+					vec2 texcord = texcoords[text_num-1];				// Add data to index
 					index->u = texcord.x;
 					index->v = texcord.y;
 				}
 				if(token[0] == '/') {
 					token += 1;
 					GLint norm_num = parse_int(&token);				// Parse normal number
-					vec3 normal = normals[norm_num];				// Add data to index
+					vec3 normal = normals[norm_num-1];				// Add data to index
 					index->xn = normal.x;
 					index->yn = normal.y;
 					index->zn = normal.z;

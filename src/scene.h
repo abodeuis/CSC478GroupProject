@@ -50,7 +50,7 @@ public:
 		// Draw scene objects
 		for (std::vector<sceneObject*>::iterator it = objects.begin(); it != objects.end(); it++){
 			if((*it)->name == "cube"){
-				(*it)->transform.rotate(0.25, 0.25, 0.25);
+				(*it)->transform.rotate(0.55, 0.25, 0.15);
 			}
 			(*it)->execute();
 		}

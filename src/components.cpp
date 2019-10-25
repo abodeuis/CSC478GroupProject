@@ -15,9 +15,9 @@
 
 void transformComponent::execute(){
 	glTranslatef(this->transformVector.x, this->transformVector.y, this->transformVector.z);
-	glRotatef(this->rotationVector.x, this->transformVector.x, this->transformVector.y, this->transformVector.z);
-	glRotatef(this->rotationVector.y, this->transformVector.x, this->transformVector.y, this->transformVector.z);
-	glRotatef(this->rotationVector.z, this->transformVector.x, this->transformVector.y, this->transformVector.z);
+	glRotatef(this->rotationVector.x, this->transformVector.x, 0, 0);
+	glRotatef(this->rotationVector.y, 0, this->transformVector.y, 0);
+	glRotatef(this->rotationVector.z, 0, 0, this->transformVector.z);
 	glScalef(this->scaleVector.x, this->scaleVector.y, this->scaleVector.z);
 }
 
@@ -40,6 +40,7 @@ void cameraComponent::execute(){
 		log_f->log_msg(LOG_MSG_ERROR, log_msg);
 	}
 	glMatrixMode( GL_MODELVIEW );
+	glEnable( GL_DEPTH_TEST );
 	glLoadIdentity();
 	//glPopMatrix();
 }
