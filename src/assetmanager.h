@@ -31,7 +31,7 @@ class assetmanager{
 private:
 	// Attributes
 	unsigned long allocatedMemory;
-
+	
 	GLint cur_mesh_id;
 	GLint cur_material_id;
 	
@@ -44,6 +44,8 @@ private:
 	std::map<int, material*> materials;
 	std::map<int, texture2D_t*> textures;
 	
+public:
+	std::string resourcesDir;
 	
 	// Functions
 private:
@@ -55,10 +57,6 @@ private:
 public:
 	unsigned long get_allocated_size(){return allocatedMemory;}
 	
-	bool change_mesh_asset_name(std::string cur_name, std::string new_name);
-	bool change_material_asset_name(std::string cur_name, std::string new_name);
-	bool change_texture_asset_name(std::string cur_name, std::string new_name);
-	
 	bool add_mesh_asset(const char *filename, std::string asset_name);
 	bool add_material_asset(const char *filename, std::string asset_name);
 	bool add_texture_asset(const char *filename, std::string asset_name);
@@ -67,11 +65,19 @@ public:
 	material* get_material_asset(std::string asset_name);
 	texture2D_t* get_texture_asset(std::string asset_name);
 	
+	bool change_mesh_asset_name(std::string cur_name, std::string new_name);
+	bool change_material_asset_name(std::string cur_name, std::string new_name);
+	bool change_texture_asset_name(std::string cur_name, std::string new_name);
+	
+	void erase_mesh_asset(std::string asset_name);
+	void erase_material_asset(std::string asset_name);
+	void erase_texture_asset(std::string asset_name);
+	
 	// Default Constructor
 	assetmanager(){
 		allocatedMemory = 0;
 		
-		load_primitives();
+		//load_primitives();
 	}
 };
 

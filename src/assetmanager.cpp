@@ -26,36 +26,6 @@ GLint assetmanager::next_material_id(){
 	return this->cur_material_id++;
 }
 
-bool assetmanager::change_mesh_asset_name(std::string cur_name, std::string new_name){
-	// Check if new name is not in use, if so go ahead and change it
-	if (mesh_id_map.find(new_name) == mesh_id_map.end()){
-		mesh_id_map[new_name] = mesh_id_map[cur_name];
-		mesh_id_map.erase(cur_name);
-		return true;
-	}
-	return false;
-}
-
-bool assetmanager::change_material_asset_name(std::string cur_name, std::string new_name){
-	// Check if new name is not in use, if so go ahead and change it
-	if (material_id_map.find(new_name) == mesh_id_map.end()){
-		material_id_map[new_name] = material_id_map[cur_name];
-		material_id_map.erase(cur_name);
-		return true;
-	}
-	return false;
-}
-
-bool assetmanager::change_texture_asset_name(std::string cur_name, std::string new_name){
-	// Check if new name is not in use, if so go ahead and change it
-	if (texture_id_map.find(new_name) == texture_id_map.end()){
-		texture_id_map[new_name] = texture_id_map[cur_name];
-		texture_id_map.erase(cur_name);
-		return true;
-	}
-	return false;
-}
-
 bool assetmanager::add_mesh_asset(const char *filename, std::string asset_name=""){
 	std::string token = filename;
 	token += "    "; // Add to test if at end of extension and so that if no extension exists ext[] access doesn't fail.
@@ -430,7 +400,7 @@ material* assetmanager::get_material_asset(std::string asset_name){
 		std::string log_msg = "Trying to access non-loaded material : ";
 		log_msg += asset_name;
 		log_f->log_msg(LOG_MSG_WARNING, log_msg);
-		return nullptr;
+		return NULL;
 	}
 }
 
@@ -443,6 +413,60 @@ texture2D_t* assetmanager::get_texture_asset(std::string asset_name){
 		std::string log_msg = "Trying to access non-loaded texture : ";
 		log_msg += asset_name;
 		log_f->log_msg(LOG_MSG_WARNING, log_msg);
-		return nullptr;
+		return NULL;
 	}
+}
+
+bool assetmanager::change_mesh_asset_name(std::string cur_name, std::string new_name){
+	// Check if new name is not in use, if so go ahead and change it
+	if (mesh_id_map.find(new_name) == mesh_id_map.end()){
+		mesh_id_map[new_name] = mesh_id_map[cur_name];
+		mesh_id_map.erase(cur_name);
+		return true;
+	}
+	return false;
+}
+
+bool assetmanager::change_material_asset_name(std::string cur_name, std::string new_name){
+	// Check if new name is not in use, if so go ahead and change it
+	if (material_id_map.find(new_name) == mesh_id_map.end()){
+		material_id_map[new_name] = material_id_map[cur_name];
+		material_id_map.erase(cur_name);
+		return true;
+	}
+	return false;
+}
+
+bool assetmanager::change_texture_asset_name(std::string cur_name, std::string new_name){
+	// Check if new name is not in use, if so go ahead and change it
+	if (texture_id_map.find(new_name) == texture_id_map.end()){
+		texture_id_map[new_name] = texture_id_map[cur_name];
+		texture_id_map.erase(cur_name);
+		return true;
+	}
+	return false;
+}
+
+void assetmanager::erase_mesh_asset(std::string asset_name){
+	mesh *m;
+	m = get_mesh_asset(asset_name);
+	if (m != NULL){delete m; m = NULL;}
+	meshes.erase(mesh_id_map[asset_name]);
+	mesh_id_map.erase(asset_name);
+}
+
+void assetmanager::erase_material_asset(std::string asset_name){
+	material *m;
+	m = get_material_asset(asset_name);
+	if (m != NULL){delete m; m = NULL;}
+	materials.erase(material_id_map[asset_name]);
+	material_id_map.erase(asset_name);
+}
+
+void assetmanager::erase_texture_asset(std::string asset_name){
+	texture2D_t *t;
+	t = get_texture_asset(asset_name);
+	if (t != NULL){delete t; t = NULL;}
+	textures.erase(texture_id_map[asset_name]);
+	texture_id_map.erase(asset_name);
 }

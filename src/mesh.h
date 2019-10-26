@@ -105,10 +105,11 @@ public:
 	
 	mesh(){
 		this->name = "Untitled Mesh";
+		this->shape = NULL;
 	}
 	
 	~mesh(){
-		delete this->shape;
+		if (this->shape != NULL){delete this->shape; this->shape = NULL;}
 	}
 };
 

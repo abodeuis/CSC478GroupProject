@@ -126,8 +126,8 @@ static void get_row(FILE *in, sgiheader *h, unsigned char *buf, int y, int z){
 }
 
 bool sgiReader::parse_file(const char *filename, texture2D_t *t){
-	// Clear any old shape data
-	delete t->texels;
+	// Clear any old texture data
+	if (t->texels != NULL){ free(t->texels); t->texels = NULL;};
 
 	std::string text_name = "A filename";
 
@@ -173,6 +173,7 @@ bool sgiReader::parse_file(const char *filename, texture2D_t *t){
 		log_msg += " could not be read as an sgi formatted file\n";
 		log_msg += "Possibly Corrupted";
 		log_f->log_msg(LOG_MSG_ERROR, log_msg);
+		free(header);
 		return false;
 	}
 
@@ -276,6 +277,8 @@ bool sgiReader::parse_file(const char *filename, texture2D_t *t){
 	
 	fclose(in);
 
+	free(header->row_size);
+	free(header->row_start);
 	free(header);
 	free(r_buf);
 	free(b_buf);

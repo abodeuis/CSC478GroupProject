@@ -16,8 +16,7 @@
 
 bool objReader::parse_file(const char *filename, mesh *m){
 	// Clear any old shape data
-	
-	if(m->shape == NULL) delete m->shape;
+	if(m->shape != NULL) {delete m->shape; m->shape = NULL;}
 
 	// Structural Data
 	std::vector<vec3> vertices;

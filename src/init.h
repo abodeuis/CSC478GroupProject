@@ -52,9 +52,9 @@ static void display(void){
 void engine_init(int argc, char * argv[]){
 	// Load the user config
 	// Not implemented yet so just using temp vars.
-	std::string logDir = "";		// INSERT YOUR LOG DIRECTORY HERE
-	std::string logFilename = "logFile.txt";
-	std::string resourcesDir = "";	// INSERT YOUR RESOURCES DIRECTORY HERE
+	//std::string logDir = "";		// INSERT YOUR LOG DIRECTORY HERE
+	//std::string logFilename = "logFile.txt";
+	//std::string resourcesDir = "";	// INSERT YOUR RESOURCES DIRECTORY HERE
 	
 	// Initialize the debug logger
 	log_f = new logger((logDir + logFilename).c_str(), LOG_MSG_STATUS);

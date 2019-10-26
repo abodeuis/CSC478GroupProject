@@ -40,8 +40,21 @@ public:
 		return output.str();
 	}
 	
+	texture2D_t(){
+		this->name = "Untitled Texture";
+		this->texture_id = -1;
+		this->width = -1;
+		this->height = -1;
+		this->lod = 0;
+		this->texformat = -1;
+		this->pixelformat = -1;
+		this->pixeltype = -1;
+		
+		this->texels = NULL;
+	}
+	
 	~texture2D_t(){
-		if (this->texels != nullptr){free(texels);};
+		if (this->texels != NULL){free(texels); this->texels = NULL;}
 	}
 };
 
