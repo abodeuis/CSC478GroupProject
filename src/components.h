@@ -30,12 +30,12 @@ private:
 	vec3 transformVector;
 	vec3 rotationVector;
 	vec3 scaleVector;
-	
+
 
 	// Functions
 public:
 	void execute();
-	
+
 	// Setters and Getters
 	// Translate functions
 	void translate(GLfloat x, GLfloat y, GLfloat z);
@@ -55,7 +55,7 @@ public:
 	void set_scale(GLfloat x, GLfloat y, GLfloat z);
 	void set_scale(vec3 vec);
 	vec3 get_scale();
-	
+
 	// Default Constructor
 	transformComponent(GLfloat x=0, GLfloat y=0, GLfloat z=0){
 		this->transformVector = x;
@@ -64,7 +64,7 @@ public:
 		this->rotationVector = vec3(0,0,0);
 		this->scaleVector = vec3(1,1,1);
 	}
-	
+
 	transformComponent(vec3 t, vec3 r=vec3(0,0,0), vec3 s=vec3(1,1,1)){
 		this->transformVector = t;
 		this->rotationVector = r;
@@ -90,12 +90,12 @@ public:
 	GLdouble cullFar;			// Far culling plan distance [n .. inf] Can not be smaller then cullNear
 	color backgroundcolor;
 	material *background;
-	
+
 
 	// Functions
 public:
 	void execute();			// Defined in cpp
-	
+
 	// Default constructor
 	cameraComponent(){
 		this->projectionMode = CC_PERSPECTIVE;
@@ -108,7 +108,7 @@ public:
 		this->cullFar = 1000;
 		this->backgroundcolor = color("#222222");
 	}
-	
+
 };
 
 class meshComponent : public baseComponent {
@@ -119,16 +119,16 @@ public:
 	// Functions
 public:
 	void execute();			// Defined in cpp
-	
+
 	// Setters and Getters
 	void set_mesh(std::string mesh_name){
 		this->m = assets->get_mesh_asset("mesh_name");
 	}
-	
+
 	std::string get_mesh(){
 		return this->m->name;
 	}
-	
+
 	// Default Constructor (Cube)
 	meshComponent(std::string mesh_name="cube"){
 		m = assets->get_mesh_asset(mesh_name);
@@ -139,7 +139,7 @@ class meshRendererComponent : public baseComponent {
 	// Attributes
 public:
 	meshComponent* associated_mesh;	 // The meshComponent that this is trying to render
-	
+
 	color meshcolor;
 	material *mat;
 	bool enableLighting;	// Enable or disable lighting on the object
@@ -149,7 +149,7 @@ public:
 	// Functions
 public:
 	void execute();			// Defined in cpp
-	
+
 	meshRendererComponent(meshComponent* associated_mesh, bool lighting=true){
 		this->associated_mesh = associated_mesh;
 		this->enableLighting = lighting;
@@ -183,11 +183,11 @@ class lightComponent : public baseComponent {
 	GLint mode; // Realtime, mixed, baked
 	GLfloat intensity;
 	GLfloat indirectMultiplier;
-	
+
 public:
 	// Functions
 	void execute();			// Defined in cpp
-	
+
 	// Default Constructor
 	lightComponent(){
 		this->lighttype = 0; // Default should be point

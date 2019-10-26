@@ -34,7 +34,7 @@ bool assetmanager::add_mesh_asset(const char *filename, std::string asset_name="
 	bool valid_reader = false;
 	meshReader *mreader;
 	mesh *m = new mesh();
-	
+
 	// obj file
 	if (ext[0] == 'o' && ext[1] == 'b' && ext[2] == 'j'){
 		mreader = new objReader();
@@ -48,7 +48,7 @@ bool assetmanager::add_mesh_asset(const char *filename, std::string asset_name="
 		logmsg += " was not read\n";
 		logmsg = "stl file types are not yet implemented, but planned to be supported in a future update";
 		log_f->log_msg(LOG_MSG_ERROR, logmsg);
-		
+
 		delete m;
 		return false;	// Take out once implemented.
 	}
@@ -60,7 +60,7 @@ bool assetmanager::add_mesh_asset(const char *filename, std::string asset_name="
 		logmsg += " was not read\n";
 		logmsg += "3ds file types are not yet implemented, but planned to be supported in a future update";
 		log_f->log_msg(LOG_MSG_ERROR, logmsg);
-		
+
 		delete m;
 		return false;	// Take out once implemented.
 	}
@@ -71,21 +71,21 @@ bool assetmanager::add_mesh_asset(const char *filename, std::string asset_name="
 		logmsg += "Unsupported file type : ";
 		logmsg += ext;
 		log_f->log_msg(LOG_MSG_ERROR, logmsg);
-		
+
 		delete m;
 		return false;
 	}
-	
+
 	// Once reader is estiblished
 	if (valid_reader){
 		// Attempt to read mesh in
 		if (mreader->parse_file(filename, m)){
 			// Mesh was read succesfully
 			allocatedMemory += sizeof(m);
-			
+
 			// Create internal id for the mesh
 			GLint id = this->next_mesh_id();
-			
+
 			// Attempt to allocate with user provided name first if applicable
 			std::string log_msg;
 			bool invalid_name = true;
@@ -120,7 +120,7 @@ bool assetmanager::add_mesh_asset(const char *filename, std::string asset_name="
 						this->mesh_id_map[asset_name] = id;
 						this->meshes[id] = m;
 						invalid_name = false;
-						
+
 						// Send log msg that resource was allocated under default name if user name was invalid.
 						if (!asset_name.empty()){
 							log_msg += "resource named \"";
@@ -152,11 +152,11 @@ bool assetmanager::add_material_asset(const char *filename, std::string asset_na
 	std::string token = filename;
 	token += "    "; // Add to test if at end of extension and so that if no extension exists ext[] access doesn't fail.
 	const char *ext = token.substr(token.find_last_of(".")+1).c_str();
-	
+
 	bool valid_reader = false;
 	materialReader *mreader;
 	material *m = new material();
-	
+
 	// mtl
 	if (ext[0] == 'm' && ext[1] == 't' && ext[2] == 'l' && IS_SPACE(ext[3])){
 		mreader = new mtlReader();
@@ -169,21 +169,21 @@ bool assetmanager::add_material_asset(const char *filename, std::string asset_na
 		logmsg += "Unsupported file type : ";
 		logmsg += ext;
 		log_f->log_msg(LOG_MSG_ERROR, logmsg);
-		
+
 		delete m;
 		return false;
 	}
-	
+
 	// Once reader is estiblished
 	if (valid_reader){
 		// Attempt to read material in
 		if (mreader->parse_file(filename, m)){
 			// Material was read succesfully
 			allocatedMemory += sizeof(m);
-			
+
 			// Create internal id for the material
 			GLint id = this->next_material_id();
-			
+
 			// Attempt to allocate with user provided name first if applicable
 			std::string log_msg;
 			bool invalid_name = true;
@@ -218,7 +218,7 @@ bool assetmanager::add_material_asset(const char *filename, std::string asset_na
 						this->material_id_map[asset_name] = id;
 						this->materials[id] = m;
 						invalid_name = false;
-						
+
 						// Send log msg that resource was allocated under default name if user name was invalid.
 						if (!asset_name.empty()){
 							log_msg += "resource named \"";
@@ -254,7 +254,7 @@ bool assetmanager::add_texture_asset(const char *filename, std::string asset_nam
 	bool valid_reader = false;
 	textureReader *treader;
 	texture2D_t *t = new texture2D_t();
-	
+
 	// bmp
 	if (ext[0] == 'b' && ext[1] == 'm' && ext[2] == 'p' && IS_SPACE(ext[3])){
 		// bmpReader treader;
@@ -263,7 +263,7 @@ bool assetmanager::add_texture_asset(const char *filename, std::string asset_nam
 		logmsg += " was not read\n";
 		logmsg += "bmp file types are not yet implemented, but planned to be supported in a future update";
 		log_f->log_msg(LOG_MSG_ERROR, logmsg);
-		
+
 		delete t;
 		return false;	// Take out once implemented.
 	}
@@ -275,7 +275,7 @@ bool assetmanager::add_texture_asset(const char *filename, std::string asset_nam
 		logmsg += " was not read\n";
 		logmsg += "png file types are not yet implemented, but planned to be supported in a future update";
 		log_f->log_msg(LOG_MSG_ERROR, logmsg);
-		
+
 		delete t;
 		return false;	// Take out once implemented.
 	}
@@ -296,28 +296,31 @@ bool assetmanager::add_texture_asset(const char *filename, std::string asset_nam
 		logmsg += "Unsupported file type : ";
 		logmsg += ext;
 		log_f->log_msg(LOG_MSG_ERROR, logmsg);
-		
+
 		delete t;
 		return false;
 	}
-	
+
 	// Once reader is estiblished
 	if (valid_reader){
 		// Attempt to read texture in
 		if (treader->parse_file(filename, t)){
 			// texture was read succesfully
 			allocatedMemory += sizeof(t);
-			
+
 			// Create internal id for the texture
 			GLuint id;
 			glGenTextures(1, &id);
-			
+
 			// Make the texture avaliable for GL
 			glBindTexture(GL_TEXTURE_2D, id);
 			glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, t->width, t->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, t->texels);
-			glGenerateMipmap( GL_TEXTURE_2D );
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			//glGenerateMipmap( GL_TEXTURE_2D );
 			t->texture_id = id;
-			
+
 			// Attempt to allocate with user provided name first if applicable
 			std::string log_msg;
 			bool invalid_name = true;
@@ -352,7 +355,7 @@ bool assetmanager::add_texture_asset(const char *filename, std::string asset_nam
 						this->texture_id_map[asset_name] = id;
 						this->textures[id] = t;
 						invalid_name = false;
-						
+
 						// Send log msg that resource was allocated under default name if user name was invalid.
 						if (!asset_name.empty()){
 							log_msg += "resource named \"";
