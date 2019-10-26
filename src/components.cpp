@@ -15,9 +15,9 @@
 
 void transformComponent::execute(){
 	glTranslatef(this->transformVector.x, this->transformVector.y, this->transformVector.z);
-	glRotatef(this->rotationVector.x, this->transformVector.x, 0, 0);
-	glRotatef(this->rotationVector.y, 0, this->transformVector.y, 0);
-	glRotatef(this->rotationVector.z, 0, 0, this->transformVector.z);
+	glRotatef(this->rotationVector.x, 1, 0, 0);
+	glRotatef(this->rotationVector.y, 0, 1, 0);
+	glRotatef(this->rotationVector.z, 0, 0, 1);
 	glScalef(this->scaleVector.x, this->scaleVector.y, this->scaleVector.z);
 }
 
@@ -55,7 +55,7 @@ void meshRendererComponent::execute(){
 	if (enableColor){
 		glColor4f(this->meshcolor.red, this->meshcolor.green, this->meshcolor.blue, this->meshcolor.alpha);
 	}
-	
+
 	// Draw Material if there is one
 	if (this->mat != NULL){
 		glShadeModel( GL_SMOOTH );
@@ -64,7 +64,7 @@ void meshRendererComponent::execute(){
 		glMaterialfv( GL_FRONT, GL_DIFFUSE, mat_diffuse);
 		glMaterialfv( GL_FRONT, GL_SPECULAR, specular);
 		glMaterialfv( GL_FRONT, GL_SHININESS, &this->mat->shininess);
-		
+
 		glEnable( GL_TEXTURE_2D );
 		glBindTexture(GL_TEXTURE_2D, assets->get_texture_asset("brick")->texture_id);
 	}
@@ -80,7 +80,7 @@ void meshRendererComponent::execute(){
 		}
 	}
 	glEnd();
-	
+
 	// End Material if there is one
 	if (this->mat != NULL){
 		glDisable( GL_TEXTURE_2D );
