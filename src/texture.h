@@ -23,7 +23,7 @@ class texture2D_t {
 public:
 	// texture name
 	std::string name;
-	GLint GL_TEXT_ID;
+	GLint texture_id;
 	
 	GLint width;
 	GLint height;

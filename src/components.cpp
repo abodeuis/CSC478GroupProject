@@ -66,7 +66,7 @@ void meshRendererComponent::execute(){
 		glMaterialfv( GL_FRONT, GL_SHININESS, &this->mat->shininess);
 		
 		glEnable( GL_TEXTURE_2D );
-		glBindTexture(GL_TEXTURE_2D, assets->get_texture_asset("brick")->GL_TEXT_ID);
+		glBindTexture(GL_TEXTURE_2D, assets->get_texture_asset("brick")->texture_id);
 	}
 
 	// Draw Geometry of the object

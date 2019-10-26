@@ -17,19 +17,19 @@
 
 extern logger *log_f;
 
-class meshReader : fileReader {
+class meshReader : public fileReader {
 public:
 	bool triangulate;		// Should the file be reduced to triangles?
 
 	virtual bool parse_file(const char *filename, mesh *m){return false;};
 };
 
-class objReader : meshReader {
+class objReader : public meshReader {
 public:
 	bool parse_file(const char *filename, mesh *m);
 };
 
-class stlReader : meshReader {
+class stlReader : public meshReader {
 public:
 	bool parse_file(const char *filename, mesh *m);
 };

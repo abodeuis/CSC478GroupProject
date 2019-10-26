@@ -53,22 +53,22 @@ static inline void rgbatorgba(unsigned char *r_buf,unsigned char *g_buf,unsigned
 	}
 }
 
-class textureReader : fileReader {
+class textureReader : public fileReader {
 public:
 	virtual bool parse_file(const char *filename, texture2D_t *t){return false;};
 };
 
-class pngReader : textureReader {
+class pngReader : public textureReader {
 public:
 	bool parse_file(const char *filename, texture2D_t *t);
 };
 
-class sgiReader : textureReader {
+class sgiReader : public textureReader {
 public:
 	bool parse_file(const char *filename, texture2D_t *t);
 };
 
-class bmpReader : textureReader {
+class bmpReader : public textureReader {
 public:
 	bool parse_file(const char *filename, texture2D_t *t);
 };

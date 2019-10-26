@@ -17,12 +17,12 @@
 
 extern logger *log_f;
 
-class materialReader : fileReader {
+class materialReader : public fileReader {
 public:
 	virtual bool parse_file(const char *filename, material *m){return false;};
 };
 
-class mtlReader : materialReader {
+class mtlReader : public materialReader {
 public:
 	bool parse_file(const char *filename, material *m);
 };
