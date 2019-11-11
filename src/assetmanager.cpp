@@ -93,6 +93,7 @@ bool assetmanager::add_mesh_asset(const char *filename, std::string asset_name="
 				// Check if user name is not currently in use
 				if (this->mesh_id_map.find(asset_name) == this->mesh_id_map.end()){
 					// The user name was not found, so okay to set it
+					m->name = asset_name;
 					this->mesh_id_map[asset_name] = id;
 					this->meshes[id] = m;
 					invalid_name = false;

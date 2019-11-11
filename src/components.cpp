@@ -55,6 +55,9 @@ void meshRendererComponent::execute(){
 	if (enableColor){
 		glColor4f(this->meshcolor.red, this->meshcolor.green, this->meshcolor.blue, this->meshcolor.alpha);
 	}
+	else {
+		glColor4f(1, 1, 1, 1);
+	}
 
 	// Draw Material if there is one
 	if (this->mat != NULL){
@@ -66,7 +69,19 @@ void meshRendererComponent::execute(){
 		glMaterialfv( GL_FRONT, GL_SHININESS, &this->mat->shininess);
 
 		glEnable( GL_TEXTURE_2D );
-		glBindTexture(GL_TEXTURE_2D, assets->get_texture_asset("brick")->texture_id);
+		//log_f->log_msg(LOG_MSG_OTHER, this->associated_mesh->m->name);
+		if (this->associated_mesh->m->name.compare("cube") == 0){
+			glBindTexture(GL_TEXTURE_2D, assets->get_texture_asset("cube")->texture_id);
+		}
+		else if(this->associated_mesh->m->name.compare("cube1") == 0){
+			glBindTexture(GL_TEXTURE_2D, assets->get_texture_asset("brick")->texture_id);
+		}
+		else if(this->associated_mesh->m->name.compare("cube2") == 0){
+			glBindTexture(GL_TEXTURE_2D, assets->get_texture_asset("turkey")->texture_id);
+		}
+		else if(this->associated_mesh->m->name.compare("sphere") == 0){
+			glBindTexture(GL_TEXTURE_2D, assets->get_texture_asset("skybox")->texture_id);
+		}
 	}
 
 	// Draw Geometry of the object
