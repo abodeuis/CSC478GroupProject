@@ -13,6 +13,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cstring>
 
 #include "filereader.h"
 
@@ -33,31 +34,31 @@ struct configReader : public fileReader {
 	std::string resourceDirectory;
 	std::string logFilename;
 	int debugLevel;
-	
+
 	void load_config(){
 		// Open file stream
 		std::fstream fh;
-		fh.open(this->filePath, 'r');
+		fh.open(this->filePath);
 		if(!fh.is_open()){
 			// Logger will not be initalized yet, so send debug msg to cout
 			std::cout << "Unable to open user config" << std::endl;
 		}
-		
+
 		// Read file line by line
 		std::string linebuf;
 		while(fh.peek() != -1) {
 			safeGetline(fh, linebuf);
-			
+
 			// Skip empty lines
 			if (linebuf.empty()){
 				continue;
 			}
-			
+
 			// Skip comment lines
 			if(linebuf[0] == '#' || linebuf[0] == ';'){
 				continue;
 			}
-			
+
 			// if delim is not found it's not a problem
 			size_t delim = linebuf.find('=');
 			std::string field = linebuf.substr(0,delim);
@@ -66,7 +67,7 @@ struct configReader : public fileReader {
 			// Trim whitespace from both values
 			trim(field);
 			trim(value);
-			
+
 			// Value lines
 			if (std::strcmp(field.c_str(), "install") != 0){
 				this->userDirectory = value;
@@ -83,7 +84,7 @@ struct configReader : public fileReader {
 		}
 		fh.close();
 	}
-	
+
 	configReader(){
 		this->filePath = "";
 		this->userDirectory = "";

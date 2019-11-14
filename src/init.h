@@ -51,9 +51,9 @@ static void display(void){
 void engine_init(int argc, char * argv[]){
 	// Load the user config
 	// Not implemented yet so just using temp vars.
-	std::string logDir = "/Users/Albert/software/UIS/CSC478GroupProject/CSC478GroupProject/";		// INSERT YOUR LOG DIRECTORY HERE
+	std::string logDir = "";		// INSERT YOUR LOG DIRECTORY HERE
 	std::string logFilename = "logFile.txt";
-	std::string resourcesDir = "/Users/Albert/software/UIS/CSC478GroupProject/CSC478GroupProject/resources/";	// INSERT YOUR RESOURCES DIRECTORY HERE
+	std::string resourcesDir = "";	// INSERT YOUR RESOURCES DIRECTORY HERE
 
 	// Initialize the debug logger
 	log_f = new logger((logDir + logFilename).c_str(), LOG_MSG_STATUS);
@@ -70,7 +70,7 @@ void engine_init(int argc, char * argv[]){
 	// Other callbacks
 	glutIdleFunc( idle );				// Called when the program has no input.
 	glutKeyboardFunc( keyboard );		// Called when a key is pressed
-	
+
 	/*
 	glutReshapeFunc( resize );			// Called when the window is resized.
 
